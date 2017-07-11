@@ -1,3 +1,32 @@
+" {{{ Pathogen-enabled plugins list
+" YouCompleteMe
+" ctrlp.vim
+" fonts
+" fzf
+" gruvbox
+" jellybeans.vim
+" nerdtree
+" nginx-vim
+" quick-scope
+" syntastic
+" tlib_vim
+" ultisnips
+" vim-addon-mw-utils
+" vim-airline
+" vim-easy-align
+" vim-fugitive
+" vim-go
+" vim-indent-guides
+" vim-instant-markdown
+" vim-polyglot
+" vim-scala
+" vim-sleuth
+" vim-snipmate
+" vim-snippets
+" vim-surround
+" vim-tags
+" vimwiki
+" }}}
 
 "{{{Auto Commands
 execute pathogen#infect()
