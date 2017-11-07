@@ -1,41 +1,76 @@
-" {{{ Pathogen-enabled plugins list
-" YouCompleteMe
-" ctrlp.vim
-" fonts
-" fzf
-" gruvbox
-" jellybeans.vim
-" nerdtree
-" nginx-vim
-" quick-scope
-" syntastic
-" tlib_vim
-" ultisnips
-" vim-addon-mw-utils
-" vim-airline
-" vim-easy-align
-" vim-fugitive
-" vim-go
-" vim-indent-guides
-" vim-instant-markdown
-" vim-polyglot
-" vim-scala
-" vim-sleuth
-" vim-snipmate
-" vim-snippets
-" vim-surround
-" vim-tags
-" vimwiki
-" }}}
+"let g:ycm_global_ycm_extra_conf = '~/ycm_extra/.ycm_extra_conf.py'
+
+let g:livedown_autorun = 1
+let g:livedown_open = 1
 
 "{{{Auto Commands
-execute pathogen#infect()
 
-" Trim trailing empty lines in file
-autocmd BufWritePre * silent! :%s#\($\n\s*\)\+\%$##
+call plug#begin('~/.vim/plugged')
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'mileszs/ack.vim'
+Plug 'jaxbot/browserlink.vim'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'lambdatoast/elm.vim'
+Plug 'morhetz/gruvbox'
+Plug 'othree/html5.vim'
+Plug 'nanotech/jellybeans.vim'
+Plug 'raphamorim/lucario'
+Plug 'scrooloose/nerdtree'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'scrooloose/syntastic'
+Plug 'majutsushi/tagbar'
+Plug 'tomtom/tcomment_vim'
+Plug 'marijnh/tern_for_vim'
+Plug 'tomtom/tlib_vim'
+Plug 'chriskempson/tomorrow-theme'
+Plug 'SirVer/ultisnips'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'guns/vim-clojure-static'
+Plug 'kchmck/vim-coffee-script'
+Plug 'hail2u/vim-css3-syntax'
+Plug 'Lokaltog/vim-distinguished'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-fireplace'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'fatih/vim-go'
+Plug 'whatyouhide/vim-gotham'
+Plug 'w0ng/vim-hybrid'
+Plug 'digitaltoad/vim-jade'
+Plug 'pangloss/vim-javascript'
+Plug 'maksimr/vim-jsbeautify'
+Plug 'elzr/vim-json'
+Plug 'andrewstuart/vim-kubernetes'
+Plug 'shime/vim-livedown'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-salve'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-sleuth'
+Plug 'honza/vim-snippets'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-vinegar'
+Plug 'cachance7/wmgraphviz.vim'
+Plug 'moll/vim-node'
+Plug 'chriskempson/base16-vim'
+Plug 'chrisbra/Colorizer'
+
+Plug 'lukaszkorecki/CoffeeTags'
+Plug 'majutsushi/tagbar'
+
+Plug 'epeli/slimux'
+
+Plug 'shime/vim-livedown'
+
+" Initialize plugin system
+call plug#end()
 
 " Automatically cd into the directory that the file is in
-autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
+"autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
 
 " Remove any trailing whitespace that is in the file
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
@@ -69,6 +104,7 @@ augroup END
 "}}}
 
 "{{{Misc Settings
+set shell=bash
 
 " Necesary  for lots of cool vim things
 set nocompatible
@@ -92,8 +128,12 @@ set autoindent
 set expandtab
 set smarttab
 
+" Allow visual block to go past last char
+set virtualedit=block
+
 " Who wants an 8 character tab?  Not me!
 set shiftwidth=2
+set tabstop=2
 "set softtabstop=3
 
 " Use english for spellchecking, but don't spellcheck by default
@@ -134,7 +174,7 @@ set incsearch
 set hlsearch
 
 " Since I use linux, I want this
-let g:clipbrdDefaultReg = '+'
+"let g:clipbrdDefaultReg = '+'
 
 " When I close a tab, remove the buffer
 set nohidden
@@ -145,17 +185,10 @@ highlight MatchParen ctermbg=4
 
 "{{{Look and Feel
 
-" Favorite Color Scheme
-if has("gui_running")
-   " Remove Toolbar
-   set guioptions-=T
-   colorscheme gruvbox
-   set bg=dark
-   set guifont=Menlo\ for\ Powerline
-else
-   colorscheme gruvbox
-   set guifont=Hack
-   set bg=dark
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  let g:base16_shell_path='~/.config/base16-shell/scripts'
+  source ~/.vimrc_background
 endif
 
 "Status line gnarliness
@@ -176,6 +209,8 @@ function! ToggleMonocleSplit()
    if g:monocle == 0
       call feedkeys("\<C-W>_")
       call feedkeys("\<C-W>|")
+      "exec <c-w>_
+      "exec <c-w>|
       let g:monocle = 1 "monocle mode is ON
    else
       call feedkeys("\<C-W>=")
@@ -186,12 +221,100 @@ endfunction
 function! SplitMovement(direction)
    let aftermove = ""
    let move = ""
-   if g:monocle == 1
-      let aftermove = "\<C-W>_\<C-W>|"
-   endif
+   "if g:monocle == 1
+   "   let aftermove = "\<C-W>_\<C-W>|"
+   "endif
    let move = "\<C-W>".a:direction
    call feedkeys(move.aftermove)
 endfunction
+
+" Uses vim-node to open the definition of the module under the cursor
+function! NodeShowModule()
+  if exists('g:nsm_buf') == 0
+    let g:nsm_buf = -1
+  endif
+
+  if exists('g:nsm_win') == 0
+    let g:nsm_win = -1
+  endif
+
+  " Grab the word under the cursor -- that's the one we're going to look for
+  let l:module = expand('<cword>')
+
+  if l:module == '' || l:module == 'var'
+    return
+  endif
+
+  " Gonna be a bumpy ride, save where the cursor started
+  let l:cur_pos = getpos('.')
+
+  let v:errmsg=''
+
+  " If we called this in the opened window, reuse the window
+  "if g:nsm_buf != -1 && bufnr('%') == g:nsm_buf
+  if winnr() == g:nsm_win
+    " Use this madness to find the first occurrence of the word because there
+    " are awful corner cases with all of the other ways
+    call feedkeys("/".l:module."/\<CR>", 'x')
+    call feedkeys("ggNn", 'x')
+
+    let l:buf_name_pre = expand('%')
+    call feedkeys("^f'gf", "x")
+    redraw
+    let l:buf_name_post = expand('%')
+
+    if l:buf_name_pre != l:buf_name_post
+      let g:nsm_buf = bufnr('%')
+    endif
+    return
+  endif
+
+  " Find where the module was required
+  silent! execute 'ij '.l:module
+
+  " Trickiness if we stay on the same line
+  let l:did_jump = 1
+  if v:errmsg == 'E387: Match is on current line'
+    let l:did_jump = 0
+  endif
+
+  " If module buffer is currently open, close it
+  let l:nsm_window = bufwinnr(g:nsm_buf)
+  if l:nsm_window != -1
+    silent! execute l:nsm_window.'wincmd c'
+  endif
+
+  " Maybe open a new module window
+  let l:win_count_pre = winnr('$')
+  call feedkeys("^f'\<C-w>f", "x")
+  redraw
+  let l:win_count_post = winnr('$')
+
+  " If the window opened then current buffer is the module buffer
+  if l:win_count_post != l:win_count_pre
+    let g:nsm_buf = bufnr('%')
+    let g:nsm_win = winnr()
+  else
+    " If we previously had the module buffer open, reopen it
+    if l:nsm_window != -1
+      silent! execute g:nsm_buf.'wincmd ^'
+    endif
+  endif
+
+  wincmd p
+
+  " After all of that moving around, try to get back to where we started
+  if l:did_jump == 1
+    call feedkeys("\<C-o>")
+  else
+    " Restore the cursor position
+    call setpos('.', l:cur_pos)
+    " Hack to preserve the column position if next movement happens to be a line
+    call feedkeys('````')
+  endif
+endfunction
+
+nnoremap <silent> <C-g> :call NodeShowModule()<CR>
 
 "{{{ Open URL in browser
 
@@ -223,18 +346,18 @@ endfunction
 " }}}
 
 "{{{ Paste Toggle
-let paste_mode = 0 " 0 = normal, 1 = paste
-
-func! Paste_on_off()
-   if g:paste_mode == 0
-      set paste
-      let g:paste_mode = 1
-   else
-      set nopaste
-      let g:paste_mode = 0
-   endif
-   return
-endfunc
+"let paste_mode = 0 " 0 = normal, 1 = paste
+"
+"func! Paste_on_off()
+"   if g:paste_mode == 0
+"      set paste
+"      let g:paste_mode = 1
+"   else
+"      set nopaste
+"      let g:paste_mode = 0
+"   endif
+"   return
+"endfunc
 "}}}
 
 "{{{ Todo List Mode
@@ -254,8 +377,6 @@ endfunction
 "}}}
 
 "{{{ Mappings
-
-"let mapleader=" "
 
 " Open Url on this line with the browser \w
 map <Leader>w :call Browser ()<CR>
@@ -278,6 +399,9 @@ nnoremap <silent> <C-H> :call SplitMovement("h")<CR>
 " Monocle mode for splits
 nnoremap <silent> <C-Space> :execute ToggleMonocleSplit()<CR>
 
+"nnoremap  <C-l> :tabn<CR>
+"nnoremap  <C-h> :tabp<CR>
+
 " Next Tab
 "nnoremap <silent> <C-Right> :tabnext<CR>
 "nnoremap <silent> <C-[> :tabnext<CR>
@@ -296,7 +420,7 @@ nnoremap <silent> <C-Right> :tabnext<CR>
 nnoremap <silent> <C-Left> :tabprevious<CR>
 
 " New Tab
-nnoremap <silent> <C-t> :tabnew<CR>
+"nnoremap <silent> <C-t> :tabnew<CR>
 
 " Rotate Color Scheme <F8>
 nnoremap <silent> <F8> :execute RotateColorTheme()<CR>
@@ -320,13 +444,29 @@ nnoremap <silent> j gj
 inoremap <silent> <Up> <Esc>gka
 inoremap <silent> <Down> <Esc>gja
 
-"nnoremap <silent> J 10j
-"nnoremap <silent> K 10k
 nnoremap <silent> J <PageDown>M
 nnoremap <silent> K <PageUp>M
 
 vmap <CR> <Plug>(EasyAlign)
 nmap <Leader>a <Plug>(EasyAlign)
+
+let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': '-tabnew' }
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 "map <C-J> <C-W>j<C-W>_
 "map <C-K> <C-W>k<C-W>_
@@ -367,27 +507,37 @@ nnoremap ; :
 nnoremap : ;
 
 " Fix email paragraphs
-"nnoremap <leader>par :%s/^>$//<CR>
+nnoremap <leader>par :%s/^>$//<CR>
 
 " EasyMotion leader
-"let g:EasyMotion_leader_key = ':'
+let g:EasyMotion_leader_key = ':'
 nmap s :w
 nmap S :b
 
+
 " Powerline
 let g:Powerline_symbols = 'fancy'
-
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':w'
 
 "ly$O#{{{ "lpjjj_%A#}}}jjzajj
 
 "}}}
 
 "{{{Taglist configuration
+let Tlist_Auto_Open = 1
 let Tlist_Use_Right_Window = 1
 let Tlist_Enable_Fold_Column = 0
 let Tlist_Exit_OnlyWindow = 1
 let Tlist_Use_SingleClick = 1
 let Tlist_Inc_Winwidth = 0
+"}}}
+
+"{{{Tagbar config
+"autocmd BufEnter * nested :call tagbar#autoopen(0)
+"autocmd FileType * nested :call tagbar#autoopen(0)
+"autocmd VimEnter * nested :call tagbar#autoopen(1)
 "}}}
 
 " {{{ HTML5 support
@@ -397,7 +547,68 @@ let Tlist_Inc_Winwidth = 0
 "let g:html5_aria_attributes_complete = 0
 " }}}
 
+" {{{ Tagbar settings
+noremap <silent> <C-t> :TagbarToggle<CR>
+"let g:CoffeeAutoTagDisabled=0     " Disables autotaging on save (Default: 0 [false])
+"let g:CoffeeAutoTagFile=<filename>       " Name of the generated tag file (Default: ./tags)
+let g:CoffeeAutoTagIncludeVars=1         " Includes variables (Default: 0 [false])
+"let g:CoffeeAutoTagTagRelative=<0 or 1>  " Sets file names to the relative path from the tag file location to the tag file location (Default: 1 [true])
+
+" }}}
+
+" {{{ FZF ctrl-p
+noremap <C-p> :Ag<CR>
+" }}}
+
+" {{{ Slimux bindings
+noremap <Leader>s :SlimuxREPLSendLine<CR>
+vnoremap <Leader>s :SlimuxREPLSendSelection<CR>
+noremap  <C-i> :SlimuxREPLSendLine<CR>
+vnoremap <C-i> :SlimuxREPLSendSelection<CR>
+noremap <Leader>b :SlimuxREPLSendBuffer<CR>
+noremap <Leader>a :SlimuxShellLast<CR>
+noremap <Leader>k :SlimuxSendKeysLast<CR>
+" }}}
+
+" {{{ Coffeescript bindings
+noremap <Leader>cc :CoffeeCompile vert<CR>
+" }}}
+
+" {{{ Syntastic settings
+let g:syntastic_auto_jump      = 0
+let g:syntastic_auto_loc_list  = 0
+let g:syntastic_check_on_open  = 1
+let g:syntastic_enable_signs   = 1
+let g:syntastic_error_symbol   = '✗'
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_mode_map = {
+            \ 'mode' : 'active',
+            \ 'passive_filetypes' : ['go']
+            \ }
+let g:syntastic_html_tidy_ignore_errors = [
+            \ 'trimming empty <i>',
+            \ 'trimming empty <span>',
+            \ '<input> proprietary attribute \"autocomplete\"',
+            \ 'proprietary attribute \"role\"',
+            \ 'proprietary attribute \"hidden\"',
+            \ 'proprietary attribute \"ng-',
+            \ '<svg> is not recognized!',
+            \ 'discarding unexpected <svg>',
+            \ 'discarding unexpected </svg>',
+            \ '<rect> is not recognized!',
+            \ 'discarding unexpected <rect>',
+            \ '<circle> is not recognized!',
+            \ 'discarding unexpected <circle>',
+            \ 'discarding unexpected </circle>'
+            \ ]
+let g:syntastic_js_jshint_args = ['--config ~/.jshintrc']
+" }}}
+
+let g:UltiSnipsExpandTrigger="<C-j>"
+
 au BufNewFile,BufRead *.ejs set filetype=html
+
+set fillchars+=stl:\ ,stlnc:\
 
 let g:screen_size_restore_pos = 1
 let g:rct_completion_use_fri = 1
@@ -406,102 +617,33 @@ let g:Tex_ViewRule_pdf = "kpdf"
 
 let g:jedi#popup_select_first=0
 
-let g:airline_powerline_fonts = 1
-set tabstop=2
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_ngdoc = 1
+set foldmethod=syntax
+set foldlevelstart=99
+
+set omnifunc=syntaxcomplete#Complete
+
+" Don't mess with mah 'K' binding!
+let g:go_doc_keywordprg_enabled = 0
+
+let g:ycm_semantic_triggers =  {
+  \   'c' : ['->', '.'],
+  \   'go' : ['.'],
+  \   'objc' : ['->', '.'],
+  \   'cpp,objcpp' : ['->', '.', '::'],
+  \   'perl' : ['->'],
+  \   'php' : ['->', '::'],
+  \   'cs,java,javascript,d,vim,ruby,python,perl6,scala,vb,elixir,go' : ['.'],
+  \   'lua' : ['.', ':'],
+  \   'erlang' : [':'],
+  \ }
+
+let g:ycm_server_keep_logfiles = 1
+let g:ycm_server_log_level = 'debug'
+
 set runtimepath^=~/.vim/bundle/ctrlp.vim
-
-let g:ctrlp_regexp = 1
-let g:ctrlp_custom_ignore = {
-	\ 'dir':  '\v[\/](vendor|bower_components|node_modules|\.(hg|svn))$',
-	\ 'file': '\v\.(exe|so|dll)$',
-	\ }
-" Insert into your .vimrc after quick-scope is loaded.
-" Obviously depends on <https://github.com/unblevable/quick-scope> being installed.
-
-function! Quick_scope_selective(movement)
-    let needs_disabling = 0
-    if !g:qs_enable
-        QuickScopeToggle
-        redraw
-        let needs_disabling = 1
-    endif
-
-    let letter = nr2char(getchar())
-
-    if needs_disabling
-        QuickScopeToggle
-    endif
-
-    return a:movement . letter
-endfunction
-
-let g:qs_enable = 0
-
-" vim-ctags
-let g:vim_tags_ignore_files = ['.gitignore', '.svnignore', '.cvsignore']
-
-"set tags=tags;~
-set tags+=.git/tags
-set shell=/bin/bash
-let g:ctrlp_max_files=0
-
-nnoremap <expr> <silent> f Quick_scope_selective('f')
-nnoremap <expr> <silent> F Quick_scope_selective('F')
-nnoremap <expr> <silent> t Quick_scope_selective('t')
-nnoremap <expr> <silent> T Quick_scope_selective('T')
-vnoremap <expr> <silent> f Quick_scope_selective('f')
-vnoremap <expr> <silent> F Quick_scope_selective('F')
-vnoremap <expr> <silent> t Quick_scope_selective('t')
-vnoremap <expr> <silent> T Quick_scope_selective('T')
-
-syn match Oddlines "^.*$" contains=ALL nextgroup=Evenlines skipnl
-syn match Evenlines "^.*$" contains=ALL nextgroup=Oddlines skipnl
-
-let g:ycm_confirm_extra_conf = 0
-
-set rtp+=~/.fzf
-
-" {{{ CoffeeScript-specific
-let coffee_lint_options = '-f ~/.coffeelint.json'
-function! LintCoffee()
-  :CoffeeLint! | cwindow
-endfunction
-
-" call coffeecompile if the buffer is already open
-function! CoffeeRecompile()
-   if bufwinnr('CoffeeCompile') > 0
-      :CoffeeCompile vert
-   endif
-endfunction
-
-" Don't lose focus!
-function! CoffeeCompile2()
-  :CoffeeCompile vert
-  wincmd p
-endfunction
-
-function! CoffeeRun2()
-  :CoffeeRun
-  wincmd p
-endfunction
-
-autocmd BufWritePost *.coffee call CoffeeRecompile()
-"
-"" Run file or visual selection through coffee compiler
-nnoremap <buffer> <Leader>cc :call CoffeeCompile2()<CR>
-vnoremap <buffer> <Leader>cc :call CoffeeCompile2()<CR>
-nnoremap <buffer> <Leader>cr :call CoffeeRun2()<CR>
-vnoremap <buffer> <Leader>cr :call CoffeeRun2()<CR>
-nnoremap <buffer> <Leader>cl :call LintCoffee()<CR>
-vnoremap <buffer> <Leader>cl :call LintCoffee()<CR>
-
-nnoremap <silent> <C-I> :call CoffeeRun2()<CR>
-vnoremap <silent> <C-I> :call CoffeeRun2()<CR>
-
-" }}}
-
-" Ultisnips
-let g:UltiSnipsExpandTrigger="<C-J>"
 
 filetype plugin indent on
 syntax on
+set rtp+=/usr/local/opt/fzf
