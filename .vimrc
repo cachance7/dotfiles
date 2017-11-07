@@ -3,71 +3,90 @@
 let g:livedown_autorun = 1
 let g:livedown_open = 1
 
-"{{{Auto Commands
+"{{{ Plugins
 
 call plug#begin('~/.vim/plugged')
 
+" Utilities
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
 Plug 'jaxbot/browserlink.vim'
-Plug 'ekalinin/Dockerfile.vim'
-Plug 'lambdatoast/elm.vim'
-Plug 'morhetz/gruvbox'
-Plug 'othree/html5.vim'
-Plug 'nanotech/jellybeans.vim'
-Plug 'raphamorim/lucario'
 Plug 'scrooloose/nerdtree'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'tomtom/tcomment_vim'
 Plug 'marijnh/tern_for_vim'
 Plug 'tomtom/tlib_vim'
+Plug 'epeli/slimux'
+Plug 'chrisbra/Colorizer'
+
+" Themes
 Plug 'chriskempson/tomorrow-theme'
-Plug 'SirVer/ultisnips'
-Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'morhetz/gruvbox'
+Plug 'othree/html5.vim'
+Plug 'nanotech/jellybeans.vim'
+Plug 'raphamorim/lucario'
+Plug 'whatyouhide/vim-gotham'
+Plug 'chriskempson/base16-vim'
+
+" Statusline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'guns/vim-clojure-static'
-Plug 'kchmck/vim-coffee-script'
-Plug 'hail2u/vim-css3-syntax'
+
+" Snippets
+Plug 'SirVer/ultisnips'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'honza/vim-snippets'
+
+" Syntax highlighting
+"Plug 'fatih/vim-go'
+"Plug 'guns/vim-clojure-static'
+"Plug 'kchmck/vim-coffee-script'
+"Plug 'hail2u/vim-css3-syntax'
+"Plug 'digitaltoad/vim-jade'
+"Plug 'pangloss/vim-javascript'
+"Plug 'elzr/vim-json'
+"Plug 'cachance7/wmgraphviz.vim'
+"Plug 'cakebaker/scss-syntax.vim'
+"Plug 'lambdatoast/elm.vim'
+"Plug 'ekalinin/Dockerfile.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'maksimr/vim-jsbeautify'
+Plug 'moll/vim-node'
+
 Plug 'Lokaltog/vim-distinguished'
 Plug 'junegunn/vim-easy-align'
+
 Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-git'
-Plug 'fatih/vim-go'
-Plug 'whatyouhide/vim-gotham'
-Plug 'w0ng/vim-hybrid'
-Plug 'digitaltoad/vim-jade'
-Plug 'pangloss/vim-javascript'
-Plug 'maksimr/vim-jsbeautify'
-Plug 'elzr/vim-json'
-Plug 'andrewstuart/vim-kubernetes'
-Plug 'shime/vim-livedown'
 Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-salve'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
-Plug 'honza/vim-snippets'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
-Plug 'cachance7/wmgraphviz.vim'
-Plug 'moll/vim-node'
-Plug 'chriskempson/base16-vim'
-Plug 'chrisbra/Colorizer'
+
+Plug 'w0ng/vim-hybrid'
+Plug 'andrewstuart/vim-kubernetes'
+Plug 'shime/vim-livedown'
 
 Plug 'lukaszkorecki/CoffeeTags'
 Plug 'majutsushi/tagbar'
 
-Plug 'epeli/slimux'
-
 Plug 'shime/vim-livedown'
+
+"Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 
 " Initialize plugin system
 call plug#end()
+
+"}}}
+
+"{{{Auto Commands
 
 " Automatically cd into the directory that the file is in
 "autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
