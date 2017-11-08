@@ -1,0 +1,56 @@
+diff --git a/autoload/airline/themes/base16_chalk.vim b/autoload/airline/themes/base16_chalk.vim
+index d0345a9..3077f86 100644
+--- a/autoload/airline/themes/base16_chalk.vim
++++ b/autoload/airline/themes/base16_chalk.vim
+@@ -37,27 +37,44 @@ let s:cterm0F = 180
+ 
+ let s:N1   = [ s:gui01, s:gui0B, s:cterm01, s:cterm0B ]
+ let s:N2   = [ s:gui06, s:gui02, s:cterm06, s:cterm02 ]
+-let s:N3   = [ s:gui09, s:gui01, s:cterm09, s:cterm01 ]
++let s:N3   = [ s:gui09, s:gui01, s:cterm06, s:cterm01 ]
+ let g:airline#themes#base16_chalk#palette.normal = airline#themes#generate_color_map(s:N1, s:N2, s:N3)
+ 
++let s:Nm1   = [ s:gui01, s:gui0B, s:cterm01, s:cterm0B ]
++let s:Nm2   = [ s:gui06, s:gui02, s:cterm06, s:cterm02 ]
++let s:Nm3   = [ s:gui09, s:gui01, s:cterm09, s:cterm01 ]
++let g:airline#themes#base16_chalk#palette.normal_modified = airline#themes#generate_color_map(s:Nm1, s:Nm2, s:Nm3)
++
+ let s:I1   = [ s:gui01, s:gui0D, s:cterm01, s:cterm0D ]
+ let s:I2   = [ s:gui06, s:gui02, s:cterm06, s:cterm02 ]
+-let s:I3   = [ s:gui09, s:gui01, s:cterm09, s:cterm01 ]
++let s:I3   = [ s:gui09, s:gui01, s:cterm06, s:cterm01 ]
+ let g:airline#themes#base16_chalk#palette.insert = airline#themes#generate_color_map(s:I1, s:I2, s:I3)
++let s:Im1   = [ s:gui01, s:gui0D, s:cterm01, s:cterm0D ]
++let s:Im2   = [ s:gui06, s:gui02, s:cterm06, s:cterm02 ]
++let s:Im3   = [ s:gui09, s:gui01, s:cterm09, s:cterm01 ]
++let g:airline#themes#base16_chalk#palette.insert_modified = airline#themes#generate_color_map(s:Im1, s:Im2, s:Im3)
+ 
+ let s:R1   = [ s:gui01, s:gui08, s:cterm01, s:cterm08 ]
+ let s:R2   = [ s:gui06, s:gui02, s:cterm06, s:cterm02 ]
+-let s:R3   = [ s:gui09, s:gui01, s:cterm09, s:cterm01 ]
++let s:R3   = [ s:gui09, s:gui01, s:cterm06, s:cterm01 ]
+ let g:airline#themes#base16_chalk#palette.replace = airline#themes#generate_color_map(s:R1, s:R2, s:R3)
++let s:Rm1   = [ s:gui01, s:gui08, s:cterm01, s:cterm08 ]
++let s:Rm2   = [ s:gui06, s:gui02, s:cterm06, s:cterm02 ]
++let s:Rm3   = [ s:gui09, s:gui01, s:cterm09, s:cterm01 ]
++let g:airline#themes#base16_chalk#palette.replace_modified = airline#themes#generate_color_map(s:Rm1, s:Rm2, s:Rm3)
+ 
+ let s:V1   = [ s:gui01, s:gui0E, s:cterm01, s:cterm0E ]
+ let s:V2   = [ s:gui06, s:gui02, s:cterm06, s:cterm02 ]
+-let s:V3   = [ s:gui09, s:gui01, s:cterm09, s:cterm01 ]
++let s:V3   = [ s:gui09, s:gui01, s:cterm06, s:cterm01 ]
+ let g:airline#themes#base16_chalk#palette.visual = airline#themes#generate_color_map(s:V1, s:V2, s:V3)
++let s:Vm1   = [ s:gui01, s:gui0E, s:cterm01, s:cterm0E ]
++let s:Vm2   = [ s:gui06, s:gui02, s:cterm06, s:cterm02 ]
++let s:Vm3   = [ s:gui09, s:gui01, s:cterm09, s:cterm01 ]
++let g:airline#themes#base16_chalk#palette.visual_modified = airline#themes#generate_color_map(s:Vm1, s:Vm2, s:Vm3)
+ 
+-let s:IA1   = [ s:gui05, s:gui01, s:cterm05, s:cterm01 ]
+-let s:IA2   = [ s:gui05, s:gui01, s:cterm05, s:cterm01 ]
+-let s:IA3   = [ s:gui05, s:gui01, s:cterm05, s:cterm01 ]
++let s:IA1   = [ s:gui05, s:gui01, s:cterm03, s:cterm01 ]
++let s:IA2   = [ s:gui05, s:gui01, s:cterm03, s:cterm01 ]
++let s:IA3   = [ s:gui05, s:gui01, s:cterm03, s:cterm01 ]
+ let g:airline#themes#base16_chalk#palette.inactive = airline#themes#generate_color_map(s:IA1, s:IA2, s:IA3)
+ 
+ " Here we define the color map for ctrlp.  We check for the g:loaded_ctrlp

@@ -18,6 +18,7 @@ Plug 'tomtom/tcomment_vim'
 Plug 'marijnh/tern_for_vim'
 Plug 'tomtom/tlib_vim'
 Plug 'epeli/slimux'
+Plug 'wincent/terminus'
 Plug 'chrisbra/Colorizer'
 
 " Themes
@@ -57,6 +58,7 @@ Plug 'moll/vim-node'
 Plug 'Lokaltog/vim-distinguished'
 Plug 'junegunn/vim-easy-align'
 
+" Various tpope plugins
 Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
