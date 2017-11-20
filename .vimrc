@@ -35,7 +35,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Snippets
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'honza/vim-snippets'
 
@@ -249,6 +249,17 @@ function! SplitMovement(direction)
    call feedkeys(move.aftermove)
 endfunction
 
+function! SimpleNodeShowModule()
+  let l:module = expand('<cword>')
+  if l:module == '' || l:module == 'var'
+    return
+  endif
+
+  call feedkeys("/".l:module."/\<CR>", 'x')
+  call feedkeys("ggNn", 'x')
+  call feedkeys("^f'gf", "x")
+endfunction
+
 " Uses vim-node to open the definition of the module under the cursor
 function! NodeShowModule()
   if exists('g:nsm_buf') == 0
@@ -335,7 +346,7 @@ function! NodeShowModule()
   endif
 endfunction
 
-nnoremap <silent> <C-g> :call NodeShowModule()<CR>
+nnoremap <silent> <C-g> :call SimpleNodeShowModule()<CR>
 
 "{{{ Open URL in browser
 
@@ -579,6 +590,8 @@ let g:CoffeeAutoTagIncludeVars=1         " Includes variables (Default: 0 [false
 
 " {{{ FZF ctrl-p
 noremap <C-p> :Ag<CR>
+noremap <C-o> :Tags<CR>
+noremap <C-u> :Buf<CR>
 " }}}
 
 " {{{ Slimux bindings
