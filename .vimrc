@@ -679,6 +679,8 @@ let g:ycm_semantic_triggers =  {
 let g:ycm_server_keep_logfiles = 1
 let g:ycm_server_log_level = 'debug'
 
+let g:gist_post_private = 1
+
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 filetype plugin indent on
