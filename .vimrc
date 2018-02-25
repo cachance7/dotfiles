@@ -20,6 +20,7 @@ Plug 'tomtom/tlib_vim'
 Plug 'epeli/slimux'
 Plug 'wincent/terminus'
 Plug 'chrisbra/Colorizer'
+Plug 'mattn/emmet-vim'
 
 " Themes
 Plug 'chriskempson/tomorrow-theme'
@@ -42,7 +43,7 @@ Plug 'honza/vim-snippets'
 " Syntax highlighting
 "Plug 'fatih/vim-go'
 "Plug 'guns/vim-clojure-static'
-"Plug 'kchmck/vim-coffee-script'
+Plug 'kchmck/vim-coffee-script'
 "Plug 'hail2u/vim-css3-syntax'
 "Plug 'digitaltoad/vim-jade'
 "Plug 'pangloss/vim-javascript'
@@ -54,6 +55,7 @@ Plug 'honza/vim-snippets'
 Plug 'sheerun/vim-polyglot'
 Plug 'maksimr/vim-jsbeautify'
 Plug 'moll/vim-node'
+Plug 'posva/vim-vue'
 
 Plug 'Lokaltog/vim-distinguished'
 Plug 'junegunn/vim-easy-align'
@@ -197,8 +199,7 @@ set hlsearch
 " Since I use linux, I want this
 "let g:clipbrdDefaultReg = '+'
 
-" When I close a tab, remove the buffer
-set nohidden
+set hidden
 
 " Set off the other paren
 highlight MatchParen ctermbg=4
@@ -533,6 +534,8 @@ inoremap <c-backspace> <c-w>
 
 " NERDTree
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
+
+let NERDTreeIgnore = ['\.pyc', '__pycache__']
 
 " Swap ; and :  Convenient.
 nnoremap ; :
