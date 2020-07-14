@@ -11,7 +11,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
-Plug 'jaxbot/browserlink.vim'
+"Plug 'jaxbot/browserlink.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'majutsushi/tagbar'
 Plug 'tomtom/tcomment_vim'
@@ -20,7 +20,37 @@ Plug 'tomtom/tlib_vim'
 Plug 'epeli/slimux'
 Plug 'wincent/terminus'
 Plug 'chrisbra/Colorizer'
+Plug 'flazz/vim-colorschemes'
 Plug 'mattn/emmet-vim'
+Plug 'nathanaelkane/vim-indent-guides'
+"Plug 'gyim/vim-boxdraw'
+" Plug 'ambv/black'
+Plug 'psf/black', { 'tag': '19.10b0' }
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'fatih/vim-go'
+Plug 'brooth/far.vim'
+" Plug 'racer-rust/vim-racer'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" " Install nightly build, replace ./install.sh with install.cmd on windows
+" Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
+" " Or install latest release tag
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+" " Or build from source code
+" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'zchee/deoplete-jedi'
+
+let g:deoplete#enable_at_startup = 0
 
 " Themes
 Plug 'chriskempson/tomorrow-theme'
@@ -36,12 +66,11 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Snippets
-"Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips'
 Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'honza/vim-snippets'
+" Plug 'honza/vim-snippets'
 
 " Syntax highlighting
-"Plug 'fatih/vim-go'
 "Plug 'guns/vim-clojure-static'
 Plug 'kchmck/vim-coffee-script'
 "Plug 'hail2u/vim-css3-syntax'
@@ -52,10 +81,13 @@ Plug 'kchmck/vim-coffee-script'
 "Plug 'cakebaker/scss-syntax.vim'
 "Plug 'lambdatoast/elm.vim'
 "Plug 'ekalinin/Dockerfile.vim'
+Plug 'davidhalter/jedi-vim'
+" Plug 'python-mode/python-mode', { 'branch': 'develop' }
 Plug 'sheerun/vim-polyglot'
 Plug 'maksimr/vim-jsbeautify'
 Plug 'moll/vim-node'
 Plug 'posva/vim-vue'
+" Plug 'https://bitbucket.org/larsyencken/vim-drake-syntax.git'
 
 Plug 'Lokaltog/vim-distinguished'
 Plug 'junegunn/vim-easy-align'
@@ -68,25 +100,34 @@ Plug 'tpope/vim-git'
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-markdown'
+" Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-salve'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-speeddating'
 
+Plug 'vim-scripts/utl.vim'
 Plug 'w0ng/vim-hybrid'
 Plug 'andrewstuart/vim-kubernetes'
-Plug 'shime/vim-livedown'
+" Plug 'shime/vim-livedown'
 
 Plug 'lukaszkorecki/CoffeeTags'
-Plug 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 
-Plug 'shime/vim-livedown'
+"Plug 'shime/vim-livedown'
 
 "Plug 'scrooloose/syntastic'
 Plug 'w0rp/ale'
+
+Plug 'ryanoasis/vim-devicons'
+Plug 'moll/vim-bbye'
+Plug 'xolox/vim-notes'
+Plug 'xolox/vim-misc'
+
+Plug 'jceb/vim-orgmode'
 
 " Initialize plugin system
 call plug#end()
@@ -100,6 +141,8 @@ call plug#end()
 
 " Remove any trailing whitespace that is in the file
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+
+" autocmd BufWrite *.svelte,*.js if ! &bin | silent! execute 'Prettier' | endif
 
 " Restore cursor position to where it was before
 augroup JumpCursorOnEdit
@@ -126,6 +169,11 @@ augroup JumpCursorOnEdit
             \   unlet b:doopenfold |
             \ endif
 augroup END
+
+let g:black_virtualenv = '/usr/local/bin/'
+
+"autocmd BufWrite *.py :Black
+autocmd BufRead *.svelte set ft=html
 
 "}}}
 
@@ -350,7 +398,7 @@ function! NodeShowModule()
   endif
 endfunction
 
-nnoremap <silent> <C-g> :call SimpleNodeShowModule()<CR>
+" nnoremap <silent> <C-g> :call SimpleNodeShowModule()<CR>
 
 "{{{ Open URL in browser
 
@@ -361,25 +409,6 @@ function! Browser ()
 endfunction
 
 "}}}
-
-"{{{Theme Rotating
-let themeindex=0
-function! RotateColorTheme()
-   let y = -1
-   while y == -1
-      let colorstring = "inkpot#ron#blue#elflord#evening#koehler#murphy#pablo#desert#torte#"
-      let x = match( colorstring, "#", g:themeindex )
-      let y = match( colorstring, "#", x + 1 )
-      let g:themeindex = x + 1
-      if y == -1
-         let g:themeindex = 0
-      else
-         let themestring = strpart(colorstring, x + 1, y - x - 1)
-         return ":colorscheme ".themestring
-      endif
-   endwhile
-endfunction
-" }}}
 
 "{{{ Paste Toggle
 "let paste_mode = 0 " 0 = normal, 1 = paste
@@ -458,9 +487,6 @@ nnoremap <silent> <C-Left> :tabprevious<CR>
 " New Tab
 "nnoremap <silent> <C-t> :tabnew<CR>
 
-" Rotate Color Scheme <F8>
-nnoremap <silent> <F8> :execute RotateColorTheme()<CR>
-
 " DOS is for fools.
 nnoremap <silent> <F9> :%s/$//g<CR>:%s// /g<CR>
 
@@ -538,7 +564,7 @@ inoremap <c-backspace> <c-w>
 " NERDTree
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 
-let NERDTreeIgnore = ['\.pyc', '__pycache__']
+let NERDTreeIgnore = ['\.pyc', '__pycache__', 'tags$']
 
 " Swap ; and :  Convenient.
 nnoremap ; :
@@ -595,16 +621,17 @@ let g:CoffeeAutoTagIncludeVars=1         " Includes variables (Default: 0 [false
 " }}}
 
 " {{{ FZF ctrl-p
-noremap <C-p> :Ag<CR>
+noremap <C-i> :Ag<CR>
 noremap <C-o> :Tags<CR>
 noremap <C-u> :Buf<CR>
+noremap <C-p> :Files<CR>
 " }}}
 
 " {{{ Slimux bindings
 noremap <Leader>s :SlimuxREPLSendLine<CR>
 vnoremap <Leader>s :SlimuxREPLSendSelection<CR>
-noremap  <C-i> :SlimuxREPLSendLine<CR>
-vnoremap <C-i> :SlimuxREPLSendSelection<CR>
+"noremap  <C-i> :SlimuxREPLSendLine<CR>
+"vnoremap <C-i> :SlimuxREPLSendSelection<CR>
 noremap <Leader>b :SlimuxREPLSendBuffer<CR>
 noremap <Leader>a :SlimuxShellLast<CR>
 noremap <Leader>k :SlimuxSendKeysLast<CR>
@@ -644,6 +671,16 @@ let g:syntastic_html_tidy_ignore_errors = [
 let g:syntastic_js_jshint_args = ['--config ~/.jshintrc']
 " }}}
 
+" ale options
+" let python-mode handle the py files
+let g:ale_pattern_options = {
+\   '.*\.py$': {'ale_enabled': 0},
+\   '.*\.html$': {'ale_enabled': 0},
+\   '.*\.ts$': {'ale_enabled': 0},
+\   '.*\.php$': {'ale_linters': ['phpcs'], 'ale_php_phpcs_standard': 'WordPressVIPMinimum'},
+\}
+
+
 let g:UltiSnipsExpandTrigger="<C-j>"
 
 au BufNewFile,BufRead *.ejs set filetype=html
@@ -656,17 +693,36 @@ let g:rct_completion_use_fri = 1
 let g:Tex_ViewRule_pdf = "kpdf"
 
 let g:jedi#popup_select_first=0
+let g:jedi#completions_enabled = 0
+let g:jedi#documentation_command = ''
+let jedi#use_environment = 'python3'
+let g:jedi#smart_auto_mappings = 0
 
-let g:javascript_plugin_jsdoc = 1
-let g:javascript_plugin_ngdoc = 1
-set foldmethod=syntax
-set foldlevelstart=99
 
-set omnifunc=syntaxcomplete#Complete
+" python-mode
+let g:pymode_doc_bind = '?'
+let g:pymode_python = 'python3'
+let g:pymode_options_colorcolumn = 0
+
+let g:pymode_rope_lookup_project = 0
+let g:pymode_rope_completion = 0
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_lint_select = ["C,E,F,W,B,B950"]
+let g:pymode_lint_ignore = ["E501", "W503",]
+"let g:pymode_lint_options_pep8 = {
+"  \   'select': 'C,E,F,W,B,B950',
+"  \   'ignore': 'E501',
+"  \   'max_line_length': 88
+"  \ }
+
+
+" let g:javascript_plugin_jsdoc = 1
+" let g:javascript_plugin_ngdoc = 1
 
 " Don't mess with mah 'K' binding!
 let g:go_doc_keywordprg_enabled = 0
 
+" YCM options
 let g:ycm_semantic_triggers =  {
   \   'c' : ['->', '.'],
   \   'go' : ['.'],
@@ -678,13 +734,208 @@ let g:ycm_semantic_triggers =  {
   \   'lua' : ['.', ':'],
   \   'erlang' : [':'],
   \ }
-
 let g:ycm_server_keep_logfiles = 1
 let g:ycm_server_log_level = 'debug'
 
+" Git Gist
 let g:gist_post_private = 1
 
+set foldmethod=syntax
+set foldlevelstart=99
+set omnifunc=syntaxcomplete#Complete
+set encoding=UTF-8
+set guifont=Hasklig\ Medium:h12
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+" CocConfig Start
+" if hidden is not set, TextEdit might fail.
+set hidden
+
+" Some servers have issues with backup files, see #649
+set nobackup
+set nowritebackup
+
+" Better display for messages
+set cmdheight=2
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" always show signcolumns
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> H :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+
+" Add diagnostic info for https://github.com/itchyny/lightline.vim
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
+
+let g:coc_filetype_map = {
+      \ 'html': 'javascript',
+      \}
+
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+"
+" let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+" let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+" CocConfig End
+
+colorscheme gruvbox
+
+" vim-go options
+let g:go_def_mode='godef'
+let g:go_metalinter_command='golangci-lint'
+let g:go_metalinter_enabled=["deadcode", "errcheck", "gosimple", "govet", "ineffassign", "staticcheck", "structcheck", "typecheck", "unused", "varcheck"]
+" noremap <silent> gt :GoInfo<cr>
+" noremap <silent> gi :GoImplements<cr>
+autocmd BufRead /Users/casey/go/src/*.go exe 'silent :GoGuruScope bitbucket.org/sentimens/...'
+
+      " \  let s:tmp = matchlist(expand('%:p'),
+      "     \ '/Users/casey/go/src/\(bitbucket.org/sentimens/[^/]\+\)')
+      " \| if len(s:tmp) > 1 |  exe 'silent :GoGuruScope ' . s:tmp[1] . '/...' | endif
+      " \| unlet s:tmp
+
+
+" vim-orgmode
+let g:org_agenda_files=['~/org/index.org']
+let g:utl_cfg_hdl_scm_http_system = "silent! open '%u'"
+let g:utl_cfg_hdl_scm_http = g:utl_cfg_hdl_scm_http_system
+
+" tagbar
+let g:tagbar_type_go = {
+	\ 'ctagstype' : 'go',
+	\ 'kinds'     : [
+		\ 'p:package',
+		\ 'i:imports:1',
+		\ 'c:constants',
+		\ 'v:variables',
+		\ 't:types',
+		\ 'n:interfaces',
+		\ 'w:fields',
+		\ 'e:embedded',
+		\ 'm:methods',
+		\ 'r:constructor',
+		\ 'f:functions'
+	\ ],
+	\ 'sro' : '.',
+	\ 'kind2scope' : {
+		\ 't' : 'ctype',
+		\ 'n' : 'ntype'
+	\ },
+	\ 'scope2kind' : {
+		\ 'ctype' : 't',
+		\ 'ntype' : 'n'
+	\ },
+	\ 'ctagsbin'  : 'gotags',
+	\ 'ctagsargs' : '-sort -silent'
+\ }
+
+let g:rustfmt_command = 'rustfmt'
+"let g:rustfmt_autosave = 1
+
+let mapleader = ','
 
 filetype plugin indent on
 syntax on
