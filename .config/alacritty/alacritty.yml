@@ -1,0 +1,21 @@
+font:
+  normal:
+    family: "Hasklug Nerd Font"
+    style: Light
+  bold:
+    family: "Hasklug Nerd Font"
+    style: Regular
+key_bindings:
+  - { key: Slash,   mods: Control,       chars: "\x1f"                 }
+  - { key: Key6,        mods: Control, chars: "\x1e"                     }
+  - { key: Return, mods: Command | Shift, chars: "\x02\x7a" }
+  - { key: D, mods: Command, chars: "\x02\x5f" }
+  - { key: D, mods: Command | Shift, chars: "\x02\x2d" }
+  - { key: H, mods: Command, chars: "\x02\x68" }
+  - { key: J, mods: Command, chars: "\x02\x6a" }
+  - { key: K, mods: Command, chars: "\x02\x6b" }
+  - { key: L, mods: Command, chars: "\x02\x6c" }
+  - { key: T, mods: Command, chars: "\x02\x63" }
+  - { key: LBracket, mods: Command | Shift, chars: "\x02\x08" }
+  - { key: RBracket, mods: Command | Shift, chars: "\x02\x0c" }
+  - { key: W, mods: Command, chars: "" }
