@@ -21,17 +21,23 @@ Plug 'epeli/slimux'
 Plug 'wincent/terminus'
 Plug 'chrisbra/Colorizer'
 Plug 'flazz/vim-colorschemes'
+Plug 'rakr/vim-one'
+Plug 'drewtempelmeyer/palenight.vim'
+
 Plug 'mattn/emmet-vim'
 Plug 'nathanaelkane/vim-indent-guides'
 "Plug 'gyim/vim-boxdraw'
 " Plug 'ambv/black'
-Plug 'psf/black', { 'tag': '19.10b0' }
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+" Plug 'psf/black', { 'tag': '19.10b0' }
+" Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'fatih/vim-go'
-Plug 'brooth/far.vim'
+" Plug 'jparise/vim-graphql'
+" Plug 'brooth/far.vim'
 " Plug 'racer-rust/vim-racer'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'pantharshit00/vim-prisma'
 
 " " Install nightly build, replace ./install.sh with install.cmd on windows
 " Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
@@ -72,7 +78,7 @@ Plug 'MarcWeber/vim-addon-mw-utils'
 
 " Syntax highlighting
 "Plug 'guns/vim-clojure-static'
-Plug 'kchmck/vim-coffee-script'
+" Plug 'kchmck/vim-coffee-script'
 "Plug 'hail2u/vim-css3-syntax'
 "Plug 'digitaltoad/vim-jade'
 "Plug 'pangloss/vim-javascript'
@@ -88,6 +94,7 @@ Plug 'maksimr/vim-jsbeautify'
 Plug 'moll/vim-node'
 Plug 'posva/vim-vue'
 " Plug 'https://bitbucket.org/larsyencken/vim-drake-syntax.git'
+Plug 'leafgarland/typescript-vim'
 
 Plug 'Lokaltog/vim-distinguished'
 Plug 'junegunn/vim-easy-align'
@@ -114,20 +121,28 @@ Plug 'w0ng/vim-hybrid'
 Plug 'andrewstuart/vim-kubernetes'
 " Plug 'shime/vim-livedown'
 
-Plug 'lukaszkorecki/CoffeeTags'
+" Plug 'lukaszkorecki/CoffeeTags'
 "Plug 'majutsushi/tagbar'
 
 "Plug 'shime/vim-livedown'
 
 "Plug 'scrooloose/syntastic'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
+
 
 Plug 'ryanoasis/vim-devicons'
 Plug 'moll/vim-bbye'
 Plug 'xolox/vim-notes'
 Plug 'xolox/vim-misc'
 
-Plug 'jceb/vim-orgmode'
+" Plug 'jceb/vim-orgmode'
+
+Plug 'freitass/todo.txt-vim'
+
+if has('nvim')
+  Plug 'nvim-treesitter/nvim-treesitter'
+  Plug 'nvim-orgmode/orgmode'
+endif
 
 " Initialize plugin system
 call plug#end()
@@ -143,6 +158,7 @@ call plug#end()
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 " autocmd BufWrite *.svelte,*.js if ! &bin | silent! execute 'Prettier' | endif
+" autocmd BufWrite *.py if ! &bin | silent! execute '%!isort -' | silent! execute '%!docformatter -' | endif
 
 " Restore cursor position to where it was before
 augroup JumpCursorOnEdit
@@ -173,7 +189,9 @@ augroup END
 let g:black_virtualenv = '/usr/local/bin/'
 
 "autocmd BufWrite *.py :Black
-autocmd BufRead *.svelte set ft=html
+" autocmd BufRead *.svelte set ft=html
+" autocmd BufRead *.tsx set ft=typescriptreact
+autocmd BufRead *.svelte set syntax=typescriptreact
 
 "}}}
 
@@ -258,15 +276,16 @@ highlight MatchParen ctermbg=4
 
 "{{{Look and Feel
 
-if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace=256
-  let g:base16_shell_path='~/.config/base16-shell/scripts'
-  source ~/.vimrc_background
-endif
+" if filereadable(expand("~/.vimrc_background"))
+"   let base16colorspace=256
+"   let g:base16_shell_path='~/.config/base16-shell/scripts'
+"   source ~/.vimrc_background
+" endif
 
 "Status line gnarliness
 set laststatus=2
-set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%l,%v][%p%%]
+"set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%l,%v][%p%%]
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Number of Lines & Columns
 "set lines=40 columns=120
@@ -543,7 +562,7 @@ nnoremap <silent> zj o<Esc>
 nnoremap <silent> zk O<Esc>
 
 " Space will toggle folds!
-nnoremap <space> za
+" nnoremap <space> za
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
@@ -553,9 +572,9 @@ map n nzz
 " Testing
 set completeopt=longest,menuone,preview
 
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-inoremap <expr> <c-n> pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
-inoremap <expr> <m-;> pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
+" inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+" inoremap <expr> <c-n> pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
+" inoremap <expr> <m-;> pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
 
 " Simulate some Visual Studio conveniences
 " Backward word delete
@@ -563,6 +582,17 @@ inoremap <c-backspace> <c-w>
 
 " NERDTree
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
+" nnoremap <silent> <C-f> :NERDTreeFind<CR>
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
 
 let NERDTreeIgnore = ['\.pyc', '__pycache__', 'tags$']
 
@@ -615,13 +645,13 @@ let Tlist_Inc_Winwidth = 0
 noremap <silent> <C-t> :TagbarToggle<CR>
 "let g:CoffeeAutoTagDisabled=0     " Disables autotaging on save (Default: 0 [false])
 "let g:CoffeeAutoTagFile=<filename>       " Name of the generated tag file (Default: ./tags)
-let g:CoffeeAutoTagIncludeVars=1         " Includes variables (Default: 0 [false])
+" let g:CoffeeAutoTagIncludeVars=1         " Includes variables (Default: 0 [false])
 "let g:CoffeeAutoTagTagRelative=<0 or 1>  " Sets file names to the relative path from the tag file location to the tag file location (Default: 1 [true])
 
 " }}}
 
 " {{{ FZF ctrl-p
-noremap <C-i> :Ag<CR>
+noremap <Tab> :Ag<CR>
 noremap <C-o> :Tags<CR>
 noremap <C-u> :Buf<CR>
 noremap <C-p> :Files<CR>
@@ -638,7 +668,7 @@ noremap <Leader>k :SlimuxSendKeysLast<CR>
 " }}}
 
 " {{{ Coffeescript bindings
-noremap <Leader>cc :CoffeeCompile vert<CR>
+" noremap <Leader>cc :CoffeeCompile vert<CR>
 " }}}
 
 " {{{ Syntastic settings
@@ -767,25 +797,47 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
+inoremap <silent><expr><C-n> coc#pum#visible() ? coc#pum#next(1) : coc#refresh()
+inoremap <silent><expr><C-p> coc#pum#visible() ? coc#pum#prev(1) : coc#refresh()
+
+
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use `[c` and `]c` to navigate diagnostics
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
@@ -810,6 +862,8 @@ endfunction
 
 " Highlight symbol under cursor on CursorHold
 " autocmd CursorHold * silent call CocActionAsync('highlight')
+
+nmap Y yy
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -836,11 +890,13 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
+command! -nargs=0 Docformat mark ` | silent! execute '%!isort -' | silent! execute '%!docformatter -' | normal ``
+command! -nargs=0 Format silent! :call CocAction('format')
 
 " Use `:Fold` to fold current buffer
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
+noremap <space> :Format<cr>
 
 " Add diagnostic info for https://github.com/itchyny/lightline.vim
 let g:lightline = {
@@ -861,28 +917,44 @@ let g:coc_filetype_map = {
 
 " Using CocList
 " Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+
+" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" " Manage extensions
+" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" " Show commands
+" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" " Find symbol of current document
+" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" " Search workspace symbols
+" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" " Do default action for previous item.
+" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 "
 " let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 " let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+call coc#config('python', {'pythonPath': $PYENV_VIRTUAL_ENV})
 " CocConfig End
 
-colorscheme gruvbox
+" Without these, we don't get nice colors in cool colorschemes like 'one'
+" (some colors will be ok, but background will be black)
+" https://stackoverflow.com/questions/62702766/termguicolors-in-vim-makes-everything-black-and-white
+set t_Co=256
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+" colorscheme gruvbox
+colorscheme one
+set background=dark
+" set background=light
+let g:airline_theme='one'
+let g:lightline_theme='one'
+
 
 " vim-go options
 let g:go_def_mode='godef'
