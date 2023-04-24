@@ -21,16 +21,23 @@ Plug 'epeli/slimux'
 Plug 'wincent/terminus'
 Plug 'chrisbra/Colorizer'
 Plug 'flazz/vim-colorschemes'
+Plug 'ap/vim-css-color'
 Plug 'rakr/vim-one'
 Plug 'drewtempelmeyer/palenight.vim'
+Plug 'github/copilot.vim'
+Plug 'elixir-lsp/coc-elixir', {'do': 'yarn install && yarn prepack'}
+
+
+" Tagbar-like feature
+Plug 'liuchengxu/vista.vim'
 
 Plug 'mattn/emmet-vim'
 Plug 'nathanaelkane/vim-indent-guides'
 "Plug 'gyim/vim-boxdraw'
 " Plug 'ambv/black'
 " Plug 'psf/black', { 'tag': '19.10b0' }
-" Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-Plug 'fatih/vim-go'
+" Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+" Plug 'fatih/vim-go'
 " Plug 'jparise/vim-graphql'
 " Plug 'brooth/far.vim'
 " Plug 'racer-rust/vim-racer'
@@ -72,9 +79,9 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Snippets
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 Plug 'MarcWeber/vim-addon-mw-utils'
-" Plug 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 
 " Syntax highlighting
 "Plug 'guns/vim-clojure-static'
@@ -94,7 +101,7 @@ Plug 'maksimr/vim-jsbeautify'
 Plug 'moll/vim-node'
 Plug 'posva/vim-vue'
 " Plug 'https://bitbucket.org/larsyencken/vim-drake-syntax.git'
-Plug 'leafgarland/typescript-vim'
+" Plug 'leafgarland/typescript-vim'
 
 Plug 'Lokaltog/vim-distinguished'
 Plug 'junegunn/vim-easy-align'
@@ -424,7 +431,7 @@ endfunction
 function! Browser ()
    let line = getline (".")
    let line = matchstr (line, "http[^   ]*")
-   exec "!konqueror ".line
+   exec "!Google\ Chrome ".line
 endfunction
 
 "}}}
@@ -463,16 +470,16 @@ endfunction
 "{{{ Mappings
 
 " Open Url on this line with the browser \w
-map <Leader>w :call Browser ()<CR>
+" nnoremap <Leader>w :call Browser ()<CR>
 
 " Open the Project Plugin <F2>
-nnoremap <silent> <F2> :Project<CR>
+" nnoremap <silent> <F2> :Project<CR>
 
 " Open the Project Plugin
-nnoremap <silent> <Leader>pal  :Project .vimproject<CR>
+" nnoremap <silent> <Leader>pal  :Project .vimproject<CR>
 
 " TODO Mode
-nnoremap <silent> <Leader>todo :execute TodoListMode()<CR>
+" nnoremap <silent> <Leader>todo :execute TodoListMode()<CR>
 
 " Split movement
 nnoremap <silent> <C-J> :call SplitMovement("j")<CR>
@@ -481,7 +488,8 @@ nnoremap <silent> <C-L> :call SplitMovement("l")<CR>
 nnoremap <silent> <C-H> :call SplitMovement("h")<CR>
 
 " Monocle mode for splits
-nnoremap <silent> <C-Space> :execute ToggleMonocleSplit()<CR>
+" nnoremap <silent> <C-Space> :execute ToggleMonocleSplit()<CR>
+nnoremap <silent> <NUL> :call ToggleMonocleSplit()<CR>
 
 "nnoremap  <C-l> :tabn<CR>
 "nnoremap  <C-h> :tabp<CR>
@@ -642,7 +650,7 @@ let Tlist_Inc_Winwidth = 0
 " }}}
 
 " {{{ Tagbar settings
-noremap <silent> <C-t> :TagbarToggle<CR>
+" noremap <silent> <C-t> :TagbarToggle<CR>
 "let g:CoffeeAutoTagDisabled=0     " Disables autotaging on save (Default: 0 [false])
 "let g:CoffeeAutoTagFile=<filename>       " Name of the generated tag file (Default: ./tags)
 " let g:CoffeeAutoTagIncludeVars=1         " Includes variables (Default: 0 [false])
@@ -651,7 +659,7 @@ noremap <silent> <C-t> :TagbarToggle<CR>
 " }}}
 
 " {{{ FZF ctrl-p
-noremap <Tab> :Ag<CR>
+noremap <Tab> :Rg<CR>
 noremap <C-o> :Tags<CR>
 noremap <C-u> :Buf<CR>
 noremap <C-p> :Files<CR>
@@ -666,6 +674,15 @@ noremap <Leader>b :SlimuxREPLSendBuffer<CR>
 noremap <Leader>a :SlimuxShellLast<CR>
 noremap <Leader>k :SlimuxSendKeysLast<CR>
 " }}}
+
+" imap <C-l> <Plug>(coc-snippets-expand)
+" vmap <C-j> <Plug>(coc-snippets-select)
+"
+" " Use <C-j> for jump to next placeholder, it's default of coc.nvim
+" let g:coc_snippet_next = '<c-j>'
+"
+" " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+" let g:coc_snippet_prev = '<c-k>'
 
 " {{{ Coffeescript bindings
 " noremap <Leader>cc :CoffeeCompile vert<CR>
@@ -1007,7 +1024,8 @@ let g:tagbar_type_go = {
 let g:rustfmt_command = 'rustfmt'
 "let g:rustfmt_autosave = 1
 
-let mapleader = ','
+" todo.txt extra syntax highlighting
+highlight  default  link  TodoPriorityD Number
 
 filetype plugin indent on
 syntax on
